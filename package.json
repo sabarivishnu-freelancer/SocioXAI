@@ -1,0 +1,36 @@
+{
+  "name": "sociox-ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "demo": "powershell -ExecutionPolicy Bypass -File scripts/run-demo.ps1",
+    "db:setup": "powershell -ExecutionPolicy Bypass -File scripts/setup-postgres.ps1",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
+    "@types/leaflet": "^1.9.22",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.33.0",
+    "next": "16.3.1",
+    "pg": "^8.16.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hook-form": "^7.85.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

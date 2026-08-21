@@ -1,0 +1,21 @@
+export type Complaint = {
+  id: string;
+  citizenId: string;
+  reference: string;
+  title: string;
+  description: string;
+  category: string;
+  status: string;
+  address: string;
+  latitude: number | null;
+  longitude: number | null;
+  photoName: string | null;
+  stateId: string | null;
+  districtId: string | null;
+  cityId: string | null;
+  wardId: string | null;
+  signatureCount: number;
+  signedByMe: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

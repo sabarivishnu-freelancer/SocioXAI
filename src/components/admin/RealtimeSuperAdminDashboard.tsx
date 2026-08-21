@@ -1,0 +1,17 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Overview = { generatedAt: string; users: { totalUsers: number; citizens: number; admins: number; officers: number }; complaints: { totalComplaints: number; activeComplaints: number; resolvedComplaints: number; highAttention: number }; signatures: { totalSignatures: number }; recent: Array<{ reference: string; title: string; status: string; updatedAt: string }> };
+
+export function RealtimeSuperAdminDashboard() {
+  const [overview, setOverview] = useState<Overview | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => { let active = true; const load = async () => { const response = await fetch("/api/admin/overview", { cache: "no-store" }); const data = await response.json(); if (!response.ok) { if (active) setError(data.error ?? "Unable to load platform data."); return; } if (active) { setOverview(data); setError(""); } }; void load(); const timer = window.setInterval(load, 10_000); return () => { active = false; window.clearInterval(timer); }; }, []);
+  if (error) return <div className="admin-page"><div className="auth-error">{error}</div></div>;
+  if (!overview) return <div className="admin-page"><div className="admin-loading">Loading live platform data...</div></div>;
+  return <div className="admin-page"><OpsHeaderLive generatedAt={overview.generatedAt} /><div className="ops-stats"><LiveStat label="ACTIVE USERS" value={overview.users.totalUsers} /><LiveStat label="CITIZENS" value={overview.users.citizens} /><LiveStat label="OPEN COMPLAINTS" value={overview.complaints.activeComplaints} tone="alert" /><LiveStat label="RESOLVED COMPLAINTS" value={overview.complaints.resolvedComplaints} tone="good" /><LiveStat label="PETITION SIGNATURES" value={overview.signatures.totalSignatures} /></div><section className="admin-section live-admin-section"><div className="queue-head"><div><p className="eyebrow">LIVE PLATFORM ACTIVITY</p><h2>Recent civic complaints</h2></div><span>Auto-refreshes every 10 seconds</span></div>{overview.recent.length === 0 ? <p className="audit-empty">No complaints have been submitted yet.</p> : <div className="live-activity-list">{overview.recent.map((item) => <div className="live-activity-row" key={item.reference}><span className="activity-pulse">●</span><div><b>{item.reference} · {item.title}</b><small>{item.status} · updated {new Date(item.updatedAt).toLocaleString()}</small></div></div>)}</div>}</section><section className="hierarchy-card"><p className="eyebrow">LIVE PLATFORM COUNTS</p><div className="hierarchy"><b>{overview.users.admins} ADMIN ACCOUNTS</b><span>·</span><b>{overview.users.officers} GOVERNMENT OPERATORS</b><span>·</span><b>{overview.complaints.highAttention} NEED REVIEW</b></div></section></div>;
+}
+
+function OpsHeaderLive({ generatedAt }: { generatedAt: string }) { return <section className="ops-header"><div><p className="eyebrow">SUPER ADMIN · PLATFORM CONTROL</p><h1>One platform. Every district.</h1><p>Live users, complaints, signatures, and operational activity across SocioX AI.</p></div><span className="live-pill">● LIVE · {new Date(generatedAt).toLocaleTimeString()}</span></section>; }
+function LiveStat({ label, value, tone }: { label: string; value: number; tone?: string }) { return <div className={`ops-stat ${tone ?? ""}`}><small>{label}</small><b>{value.toLocaleString()}</b><span>↗ live count</span></div>; }

@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sociox
+      POSTGRES_PASSWORD: sociox_dev_password
+      POSTGRES_DB: sociox
+    ports:
+      - "5432:5432"
+    volumes:
+      - sociox_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sociox -d sociox"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  sociox_postgres_data:
