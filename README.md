@@ -12,7 +12,7 @@ After downloading or cloning the project, open PowerShell in the project folder 
 powershell -ExecutionPolicy Bypass -File scripts/run-demo.ps1
 ```
 
-This command starts PostgreSQL, waits for it to be ready, creates `.env.local`, installs dependencies, applies the database schema, creates demo accounts and sample data, and starts the Next.js frontend and backend at http://localhost:3000.
+This command starts PostgreSQL, waits for it to be ready, creates `.env.local`, installs dependencies, applies the database schema, creates demo accounts and sample data, and starts the Next.js frontend and backend at http://localhost:3000. It also binds the app to the local network and prints a Wi-Fi URL.
 
 Demo password for all accounts: `Demo@12345`
 
@@ -41,6 +41,16 @@ npm run dev
 ```
 
 The application uses PostgreSQL for authentication, sessions, complaints, districts, departments, and wards.
+
+## Open from another device on the same Wi-Fi
+
+Run the demo launcher on the host computer and note the printed Wi-Fi address, for example:
+
+```text
+http://192.168.1.25:3000
+```
+
+Open that address from the jury laptop or phone connected to the same Wi-Fi network. Allow Node.js through Windows Firewall if Windows shows a network access prompt. Do not use `localhost` on the other device because it refers to that device itself.
 
 ## Getting Started
 

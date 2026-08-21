@@ -30,5 +30,8 @@ if ($LASTEXITCODE -ne 0) { throw 'Unable to apply the PostgreSQL schema.' }
 node '.\scripts\seed-demo.cjs'
 if ($LASTEXITCODE -ne 0) { throw 'Unable to create demo accounts.' }
 
+$lanAddress = (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias 'Wi-Fi' -ErrorAction SilentlyContinue | Where-Object { $_.IPAddress -notlike '169.254.*' -and $_.PrefixOrigin -ne 'WellKnown' } | Select-Object -First 1 -ExpandProperty IPAddress)
+if (-not $lanAddress) { $lanAddress = (Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' } | Select-Object -First 1 -ExpandProperty IPAddress) }
 Write-Host 'SocioX AI is ready at http://localhost:3000' -ForegroundColor Green
-npm run dev
+if ($lanAddress) { Write-Host "Wi-Fi access: http://${lanAddress}:3000" -ForegroundColor Green }
+npm run dev -- --hostname 0.0.0.0
