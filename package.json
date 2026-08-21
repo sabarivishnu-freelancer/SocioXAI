@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:network": "next dev --hostname 0.0.0.0",
     "demo": "powershell -ExecutionPolicy Bypass -File scripts/run-demo.ps1",
     "db:setup": "powershell -ExecutionPolicy Bypass -File scripts/setup-postgres.ps1",
     "build": "next build",

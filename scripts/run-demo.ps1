@@ -19,6 +19,7 @@ if (-not (Test-Path '.env.local')) {
   ) | Set-Content -Encoding utf8 '.env.local'
   Write-Host 'Created .env.local' -ForegroundColor DarkGray
 }
+Remove-Item Env:DATABASE_URL -ErrorAction SilentlyContinue
 $env:DATABASE_URL = 'postgresql://sociox:sociox_dev_password@localhost:5432/sociox'
 
 npm install
@@ -34,4 +35,4 @@ $lanAddress = (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias 'Wi-Fi' -Err
 if (-not $lanAddress) { $lanAddress = (Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' } | Select-Object -First 1 -ExpandProperty IPAddress) }
 Write-Host 'SocioX AI is ready at http://localhost:3000' -ForegroundColor Green
 if ($lanAddress) { Write-Host "Wi-Fi access: http://${lanAddress}:3000" -ForegroundColor Green }
-npm run dev -- --hostname 0.0.0.0
+npm run dev:network
